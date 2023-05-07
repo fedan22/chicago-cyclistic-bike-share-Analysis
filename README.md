@@ -1,205 +1,54 @@
-# chicago-cyclistic-bike-share-Analysis
-This project describes Analyzing Divvy's riding data to develop digital marketing strategies to convert casual riders into annual members.
+Author: Boluwatife Afe
 
-Load the packages
-```{r}
-library(tidyverse)#wrangle data
-library(dplyr) #cleandata
-library(lubridate) #wrangle data attributes
-library(ggplot2) #visualize data
-library(readr)
-library(skimr)#get summary of data
-```
-STEP 1:prepare the data and comn=bine them in one data frame
-```{r}
-getwd()
-setwd("/Users/macbookpro/Downloads/CYCLISTIC")
-```
+Date: May 7, 2023
 
-STEP 2:combine the data from september 2020 to August 2021 into one data frame
-```{r}
-bike_data <- rbind(
-  read_csv("202009-divvy-tripdata.csv"),
-  read_csv("202010-divvy-tripdata.csv"),
-  read_csv("202011-divvy-tripdata.csv"),
-  read_csv("202012-divvy-tripdata.csv"),
-  read_csv("202101-divvy-tripdata.csv"),
-  read_csv("202102-divvy-tripdata.csv"),
-  read_csv("202103-divvy-tripdata.csv"),
-  read_csv("202104-divvy-tripdata.csv"),
-  read_csv("202105-divvy-tripdata.csv"),
-  read_csv("202106-divvy-tripdata.csv"),
-  read_csv("202107-divvy-tripdata.csv"),
-  read_csv("202108-divvy-tripdata.csv")
-)
-```
 
-STEP 3: Examine the data frame
-```{r}
-head(bike_data)  #to get the first few records from all the columns displayed
-dim(bike_data) #to show the number of rows and columns the data frame has
-colnames(bike_data) #to identify all the colums in the bike_data 
-summary(bike_data) #to generate descriptive statistics of a data object e.g mean, median
-```
 
-STEP 4: check for the null values(NA)
-```{r}
-sum(is.na(bike_data)) #choosing not to remove NA because most NA are related to the start and end station names
-```
 
-STEP 5: drop the columns we don’t need : start_lat, start_lng,end_lat,end_lng
-```{r}
-bike_data <- bike_data %>%
-  select(-c(start_lat,start_lng,end_lat,end_lng))
-colnames(bike_data)
-```
 
-STEP 6: #Add column ride_length which is the lenght of each ride from ended_at minus started_at and format HH:MM:SS #Add also column day_of_the_week and calculate the day of the week that each ride started.
+The Case study follows the six steps analysis process:
 
-```{r}
-bike_data <- bike_data %>%
-  mutate(ride_length = ended_at - started_at) %>%
-  mutate(day_of_the_week = weekdays(as.Date(bike_data$started_at)))
+❓ Ask
 
-#convert ride_length from seconds into minutes
-bike_data$ride_length <- as.numeric(bike_data$ride_length)
-bike_data$ride_length <- as.numeric(bike_data$ride_length/60)
-head(bike_data)
-```
-STEP 7:removing the bad data and doing analysis on the ride_length column #check for the data with negative ride_length
-```{r}
-bike_data <- bike_data[bike_data$ride_length>0,]
+🖥 Prepare
 
-#check for data with ride_length more than 1 day (1440minutes).3484 rides went down for more than one day
-sum(bike_data$ride_length > 1440)
+🛠 Process
 
-#check for extreme ontliner:55944.15 minutes or 38.83 days for the max ride and less than 1sec for the least ride 
-min(bike_data$ride_length)
-max(bike_data$ride_length)
+📈 Analyze
 
-#check the mean and median
-mean(bike_data$ride_length)
-median(bike_data$ride_length)
-```
+📋 Share
 
-STEP 8: Aggregate to analyze the data based on user type: member vs casual
-```{r}
-aggregate(bike_data$ride_length ~ bike_data$member_casual, FUN = mean)
-aggregate(bike_data$ride_length ~ bike_data$member_casual, FUN = median)
-#Average ride time by each day for memebers vs casuals
-bike_data$day_of_the_week <- ordered(bike_data$day_of_the_week, levels=c("Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"))
-aggregate(bike_data$ride_length ~ bike_data$member_casual + bike_data$day_of_the_week, FUN = mean)
-```
+🔌 Act
 
-STEP 9:Further Analysis into the stations, which shows where NA belongs in step IV
-```{r}
-head(count(bike_data, start_station_name, member_casual, rideable_type, sort = TRUE))
-head(count(bike_data, end_station_name, member_casual, rideable_type, sort = TRUE))
-```
 
-STEP 10: analyze ridership by type and weekday
-```{r}
-bike_data %>%
-  mutate(weekday = wday(started_at, label = TRUE)) %>% #creates weekday field using wday()
-  group_by(member_casual, weekday) %>% #groups by usertype and weekday
-  summarise(number_of_rides = n(),          #calculates the number of rides
-            average_duration = mean(ride_length)) %>% #calculates the average duration
-  arrange(member_casual, weekday)     #sorts
-```
+SCENARIO
+In 2016, Cyclistic launched a successful bike-share offering. The company’s future success depends on maximizing the number of annual memberships. Therefore, your team wants to understand how casual riders and annual members use Cyclistic bikes differently. From these insights, your team will design a new marketing strategy to convert casual riders into annual members.
 
-STEP 11: visualize the number of rides by rider types and average duration
-```{r}
-par(mfrow=c(2,2)) ##create a grid of plots with 2 rows and 2 columns.
+1. ASK
+ BUSINESS TASK: is to analyze Divvy's riding data to develop digital marketing strategies to convert casual riders into annual members.
+ 
 
-bike_data %>%
-  mutate(weekday = wday(started_at, label = TRUE)) %>%
-  group_by(member_casual,weekday)%>%
-  summarise(number_of_rides = n(), average_duration = mean(ride_length)) %>%
-  arrange(member_casual, weekday) %>%
-  ggplot(aes(x=weekday, y=number_of_rides, fill= member_casual))+
-  geom_col(position = "dodge")
-```  
+ Primary stakeholders: The director of marketing Lily Moreno and Cyclistic executive team.
+ 
 
-STEP 12:visualize memeber vs casual on short ride (less and one hour)
-```{r}
-one_hour_data <- bike_data %>% filter(ride_length < 60)
-one_hour_data$ride_length_by_mins <- cut(one_hour_data$ride_length, breaks = 20)
+ Secondary stakeholders: Cyclistic marketing analytics team.
+ 
 
-ggplot(data = one_hour_data)+
-  geom_bar(mapping = aes(x = ride_length_by_mins, fill= member_casual)) +
-  labs(title = "one hour ride length") + 
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5,hjust = 1))+
-  scale_x_discrete(labels=c("3", "6","9","12", "15","18","21","24","27","30","33","39","42","45","48","51","54","57","60"))
-```
 
-STEP 13: visualize day of the week riding choices between member vs casual
-```{r}
-ggplot(data = bike_data) + 
-  geom_bar(mapping = aes(x = factor(day_of_the_week),fill= rideable_type))+
-  facet_wrap(~member_casual)+
-  labs(title = 'riding choice during the day of the week', x= 'day of the week')+
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
-```
-STEP 14:check for peak time for bike usage between member vs casual
-```{r}
-hour_data <- bike_data
-hour_data$start_hour <- as.numeric(format(strptime(bike_data$started_at,"%Y-%m-%d %H:%M:%OS"),'%H'))
+2. PREPARE
+Data Source: 12 Month (Aug 2020 to August 2021) of Cyclistic trip Data from Motivate International Inc: [data source link](https://divvy-tripdata.s3.amazonaws.com/index.html) with [license](https://ride.divvybikes.com/data-license-agreement)
 
-ggplot(data = hour_data) +
-  geom_bar(mapping = aes(x=start_hour, fill = member_casual), stat = 'count')+
-  facet_wrap(~factor(day_of_the_week))+
-  labs(title = "bike usage by starting hour", x="starting hour")+
-  theme(axis.text.x = element_text(angle= 90, vjust = 0.5, hjust = 1))
-```
+The dataset has 12 CSV, 13 columns and 4.9 million rows. The data also follow a ROCCC approach:
 
-STEP 15:save as csv for further analysis and visualization in tableau
-```{r}
-#the data frame
-write_csv(bike_data,"bikedata.csv")
+- Reliability: the data includes complete and accurate ride data from Divvy. Divvy is program of the Chicago Department of Transportation (CDOT), which owns the city’s bikes, stations and vehicles.
+- Original: the data is from Motivate International Inc, which operates the City of Chicago’s Divvy bicycle sharing service.
+- Comprehensive: The data incudes type of bikes, start and end station name, start and end time, station ID, station longtitude and latitude, membership types.
+-Current: data is up to date to August 2021
 
-#total and average weekly rides by rider type 
-summary_ride_weekly <- bike_data %>%
-  mutate(weekday = wday(started_at, label = TRUE )) %>%
-  group_by(member_casual, weekday) %>%
-  summarise(number_of_rides = n(),
-            average_duration = mean(ride_length))%>%
-  arrange(member_casual, weekday)
-  
-write_csv(summary_ride_weekly,"summary_ride_weekly.csv")
 
-#total and average weekly rides by rider type
-summary_ride_weekly <- bike_data %>%
-  mutate(weekday = wday(started_at, label = TRUE )) %>%
-  group_by(member_casual, weekday, rideable_type) %>%
-  summarise(number_of_rides = n(),
-            average_duration = mean(ride_length))%>%
-  arrange(member_casual, weekday)
-  
-write_csv(summary_ride_weekly,"summary_ride_weekly_type.csv")
 
-#total and average monthly rides by rider type
-summary_month <- bike_data %>%
-  mutate(month = month(started_at, label = TRUE )) %>%
-  group_by(month,member_casual) %>%
-  summarise(number_of_rides = n(),
-            average_duration = mean(ride_length))%>%
-  arrange(month,member_casual)
 
-write_csv(summary_ride_weekly,"summary_ride_monthly.csv")
 
-#most popular stations
-popular_stations <- bike_data %>%
-  mutate(station = start_station_name) %>%
-  drop_na(start_station_name) %>%
-  group_by(start_station_name, member_casual) %>%
-  summarise(number_of_rides=n())
-  
-write.csv(popular_stations, "popular_stations.csv")
-  
-#total memebership types and rideable types 
-total_riders <- data.frame(table(bike_data$member_casual))
-total_types <- data.frame(table(bike_data$rideable_type))
 
-write_csv(total_riders, "total_riders.csv")
-write_csv(total_types, "total_types.csv")
-```
+
+
