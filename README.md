@@ -180,7 +180,7 @@ bike_data %>%
 
 <img src="boluwatife.png"> 
 
-For the complete R code and analyze the data using ggplot for graphical interpretation, please view the rmd file on this.
+For the complete R code and analyze the data using ggplot for graphical interpretation, please view the rmd file on this [R code link](https://github.com/fedan22/chicago-cyclistic-bike-share-Analysis/blob/main/cyclistic.Rmd)
 
 
 
