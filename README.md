@@ -185,7 +185,7 @@ bike_data %>%
   
 ```
 
-
+![Screenshot 2023-05-08 at 00.42.07.png](https://github.com/fedan22/chicago-cyclistic-bike-share-Analysis/blob/master/Desktop/Screenshot 2023-05-08 at 00.42.07.png)
 
 
 
