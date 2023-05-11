@@ -1,7 +1,17 @@
+
+
+
 Author: Boluwatife Afe
 
 
 Date: May 7, 2023
+
+
+[Tableau Dashboard](https://public.tableau.com/app/profile/boluwatife.afe/viz/CYCLISTICBIKESHAREANALYSISDASHBOARD/Dashboard1#1)
+
+
+
+[Tableau story Presentation to Stakeholders](https://public.tableau.com/app/profile/boluwatife.afe/viz/CYCLISTICBIKESHAREANALYSISPRESENTATION/Story1?publish=yes)
 
 
 
@@ -188,6 +198,45 @@ bike_data %>%
 
 
 5. SHARE
+
+[Tableau Dashboard on Bike Sharing Case Study.](https://public.tableau.com/app/profile/boluwatife.afe/viz/CYCLISTICBIKESHAREANALYSISDASHBOARD/Dashboard1#1)
+
+
+<img src="Dashboard 1.png">
+
+
+
+
+[Tableau Presentation on Cyclistic Bike Sharing Case Study.](https://public.tableau.com/app/profile/boluwatife.afe/viz/CYCLISTICBIKESHAREANALYSISPRESENTATION/Story1?publish=yes)
+
+
+<img src="story 2.png">
+
+
+
+
+
+6. ACT
+
+
+Conclusion based on my analysis:
+
+ - Casual riders ride longer duration, but least total trips.
+ - Most popular station for casual riders are: Streeter Dr & Grand Ave, Lake Shore Dr & Monroe St, Millennium Park.
+ - Casual riders rides mostly during the weekends.
+ - Casual riders rides longer on docked bike.
+
+
+
+Marketing recommendations to convert casual riders to annual members:
+
+- Promotional weekend term membership for the weekends.
+
+
+- Point-award incentive system for riding more trips in a membership format to receive discount and partnership offers.
+
+
+- Marketing effort on the top 5 most popular stations for the causal riders. It can be a booth, print media on the bike or the locking station area, or social media post on contest starting from the most popular stations.
 
 
 
